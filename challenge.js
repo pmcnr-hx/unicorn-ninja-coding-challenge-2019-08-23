@@ -1,15 +1,12 @@
 const unobstructedWestViewCount = buildings => {
-  const [result] = buildings.reverse().reduce(
-    ([count, highestHeight], height) => {
-      if (height > highestHeight) {
-        highestHeight = height
-        count++
-      }
-      return [count, highestHeight]
-    },
-    [0, 0]
-  )
-  return result
+  const unobstructedWestViewHeights = buildings.reduce((candidateHeights, height) => {
+    if (height < candidateHeights[candidateHeights.length - 1]) {
+      return [...candidateHeights, height]
+    }
+    const shorterIndex = candidateHeights.findIndex(element => element <= height)
+    return [...candidateHeights.slice(0, shorterIndex), height]
+  }, [])
+  return unobstructedWestViewHeights.length
 }
 
 module.exports = { unobstructedWestViewCount }
